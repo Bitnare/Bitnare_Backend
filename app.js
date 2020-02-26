@@ -23,8 +23,10 @@ app.use(cors());
 app.use("/user", userRegister);
 app.use("/post",postRoutes);
 
-
 app.use("/events",bitnareEvents);
+
+
+
 
 
 
