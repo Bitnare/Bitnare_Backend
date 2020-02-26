@@ -1,30 +1,42 @@
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
-const bodyparser = require('body-parser');
+
+
 const mongoose = require('./database/db');
 const cors = require("cors");
 const multer = require('multer');
+const bodyparser = require('body-parser');
+const userRegister = require("./routes/userRegister");
+const postRoutes= require("./routes/postRoutes.js");
 
 const userRegister = require("./routes/userRegister");
 
-const postRoutes = require("./routes/postRoutes.js");
+const bitnareEvents = require("./routes/bitnareEvents");
 
 
-
-app.use("/uploads", express.static('uploads'))
+app.use("/uploads",express.static('uploads'))
 app.use(morgan("dev"));
-app.use(bodyparser.urlencoded({ extended: false }));
+app.use(bodyparser.urlencoded({extended:false}));
 app.use(bodyparser.json());
 app.use(cors());
-app.use("/post", postRoutes);
+
+app.use("/user", userRegister);
+app.use("/post",postRoutes);
+
+
+app.use("/events",bitnareEvents);
+
+
+
+
 
 app.use("/user", userRegister);
 
 
 //for handliing cors errors
 app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
+
     res.header(
         "Access-Control-Allow-Headers",
         "Origin,X-Requested-With,Content-Type,Authorization"
@@ -38,11 +50,15 @@ app.use((req, res, next) => {
 
 
 
+
 app.use((req, res, next) => {
     const error = new Error("Not found");
     error.status = 404;
     next(error);
-});
+  });
+
+ 
+
 
 app.use((error, req, res, next) => {
     res.status(error.status || 500);
@@ -53,4 +69,7 @@ app.use((error, req, res, next) => {
     });
 });
 const port = process.env.PORT || 8000;
+
 app.listen(port);
+
+
