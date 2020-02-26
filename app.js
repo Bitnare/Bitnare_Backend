@@ -6,6 +6,7 @@ const mongoose = require('./database/db');
 const cors = require("cors");
 const multer = require('multer');
 
+const userRegister = require("./routes/userRegister");
 
 const postRoutes = require("./routes/postRoutes.js");
 
@@ -17,6 +18,8 @@ app.use(bodyparser.urlencoded({ extended: false }));
 app.use(bodyparser.json());
 app.use(cors());
 app.use("/post", postRoutes);
+
+app.use("/user", userRegister);
 
 
 //for handliing cors errors
