@@ -10,6 +10,7 @@ const bodyparser = require('body-parser');
 const userRegister = require("./routes/userRegister");
 const postRoutes= require("./routes/postRoutes.js");
 
+const userRegister = require("./routes/userRegister");
 
 const bitnareEvents = require("./routes/bitnareEvents");
 
@@ -29,6 +30,8 @@ app.use("/events",bitnareEvents);
 
 
 
+
+app.use("/user", userRegister);
 
 
 //for handliing cors errors
