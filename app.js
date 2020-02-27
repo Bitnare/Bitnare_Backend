@@ -8,15 +8,18 @@ const multer = require('multer');
 
 
 const postRoutes = require("./routes/postRoutes.js");
+const videoBitnare = require("./routes/BitnareVideos.js");
 
 
 
 app.use("/uploads", express.static('uploads'))
+app.use("/video", express.static('videos'));
 app.use(morgan("dev"));
 app.use(bodyparser.urlencoded({ extended: false }));
 app.use(bodyparser.json());
 app.use(cors());
 app.use("/post", postRoutes);
+app.use("/video", videoBitnare);
 
 
 //for handliing cors errors

@@ -18,3 +18,19 @@ connect.then(
         console.log(err);
     }
 );
+
+
+//init gfs
+let gfs;
+connect.then("open", () => {
+    // init stream
+    gfs = new mongoose.mongo.GridFSBucket(connect.db, {
+        bucketName: "Postvideos"
+    });
+});
+
+
+module.exports = {
+    url,
+    gfs
+}

@@ -3,39 +3,55 @@ const crypto = require('crypto');
 const path = require('path');
 const router = express.Router();
 const multer = require('multer');
-const Mongourl = require('../database/db.js');
+const videosModel = require('../model/BitnareVideos.js');
 
-//Storage engine for multer to store upload files directlyy to mongodb
-const GridfsStorage = require('multer-gridfs-storage');
-const storage = new GridfsStorage({
-    url: Mongourl,
-    file: (req, file) => {
-        return new Promise((resolve, reject) => {
-            crypto.randomBytes(16, (err, buf) => {
-                if (err) {
-                    return reject(err);
-                }
-                const filename = buf.toString("hex") + path.extname(file.originalname);
-                const fileInfo = {
-                    filename: filename,
-                    bucketName: "Postvideos"
-                };
-                resolve(fileInfo);
-            });
-        });
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, './videos/');
+
+    },
+
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + file.originalname);
     }
 });
+
+
+
+
 
 const upload = multer({ storage });
 
 
-router.post('/add', upload.single("file"), (req, res, next) => {
-    res.status(200).json({
-        "Message": "Video Sucessfullyy uploaded"
+
+
+router.post('/add', upload.array("videopath", 5), (req, res, next) => {
+    const videoData = {
+        "videodescription": req.body.videodescription,
+        "videopath": req.files.map(file => {
+            const videoPath = file.path;
+            return videoPath;
+        })
+    }
+
+    const saveVideo = new videosModel(videoData);
+    saveVideo.save().then(result => {
+        res.status(200).json({
+            "Message": "Successfully video added",
+            "result": result
+        })
+
+
+    }).catch(err => {
+        res.status(500).json({
+            err: err
+        })
+
     })
 
-
 });
+
+
 
 
 
