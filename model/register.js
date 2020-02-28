@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const validator = require('validator');
 const uniqueValidator = require('mongoose-unique-validator');
 const geocoder = require("../utils/geocoder");
+const jwt = require('jsonwebtoken');
 
 const userSchema = new Schema({
 
@@ -96,9 +97,15 @@ const userSchema = new Schema({
             index: '2dsphere'
           }
     },
-
+    tokens: [{
+        token: {
+            type: String,
+          
+        }
+    }]
 });
 
+//hashed password
 userSchema.statics.checkCrediantialsDb = async (username, password,callback) => {
     const user = await User.findOne({
         username: username
@@ -111,20 +118,35 @@ userSchema.statics.checkCrediantialsDb = async (username, password,callback) => 
     
      
     };
-}
+};
 
 
+// //save longitude and latitude of  adress(requires city ,address and zipcode for increased accuracy
+// // for example Chabahil, Kathmandu 44602)
+// userSchema.pre('save',async function(next){
+//     const loc = await geocoder.geocode(this.adress);
+//     this.location={
+//         type:'Point',
+//         coordinates: [loc[0].longitude,loc[0].latitude],
+//     }
+//     next();
+// })
+
+userSchema.methods.generateAuthToken = async function (){
+    const user = this;
+    const token = jwt.sign(
+        {_id: user._id.toString()}, 
+        "bitnare",{
+            expiresIn: "60m"
+        });
+        console.log(token);
+        user.tokens = user.tokens.concat({
+            token:token
+        });
+        await user.save();
+        return token;
+};
 
 userSchema.plugin(uniqueValidator);
-//save longitude and latitude of  adress(requires city ,address and zipcode for increased accuracy
-// for example Chabahil, Kathmandu 44602)
-userSchema.pre('save',async function(next){
-    const loc = await geocoder.geocode(this.adress);
-    this.location={
-        type:'Point',
-        coordinates: [loc[0].longitude,loc[0].latitude],
-    }
-    next();
-})
 const User = mongoose.model("register", userSchema);
 module.exports = User;
