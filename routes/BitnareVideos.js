@@ -24,7 +24,7 @@ const upload = multer({ storage });
 
 //route to get all videos from diskstorage
 router.get('/', (req, res, next) => {
-    videosModel.find().select('_id videodescription videopath userid').exec()
+    videosModel.find().select('_id videodescription videopath userid videodate').exec()
         .then(result => {
             res.status(200).json({
 
@@ -45,7 +45,8 @@ router.post('/add', upload.array("videopath", 5), (req, res, next) => {
         "videopath": req.files.map(file => {
             const videoPath = file.path;
             return videoPath;
-        })
+        }),
+        "videodate": req.body.videodate
     }
 
     const saveVideo = new videosModel(videoData);
@@ -69,7 +70,7 @@ router.post('/add', upload.array("videopath", 5), (req, res, next) => {
 
 router.get('/:videoid', (req, res, next) => {
     const id = req.params.videoid;
-    videosModel.findById(id).select('_id videodescription videopath')
+    videosModel.findById(id).select('_id videodescription videopath videodate')
         .exec().then(result => {
             res.status(200).json({
                 "Result": result
