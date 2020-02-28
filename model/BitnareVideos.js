@@ -15,6 +15,10 @@ const videoSchema = new Schema({
         type: Schema.Types.ObjectId
 
 
+    },
+    videodate: {
+        type: String,
+        default: Date.now()
     }
 
 
