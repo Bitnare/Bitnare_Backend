@@ -13,7 +13,7 @@ const videoBitnare = require("./routes/BitnareVideos.js");
 
 
 app.use("/uploads", express.static('uploads'))
-app.use("/video", express.static('videos'));
+app.use("/videos", express.static('videos'));
 app.use(morgan("dev"));
 app.use(bodyparser.urlencoded({ extended: false }));
 app.use(bodyparser.json());
