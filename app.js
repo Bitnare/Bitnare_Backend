@@ -11,10 +11,7 @@ const userRegister = require("./routes/userRegister");
 const postRoutes = require("./routes/postRoutes.js");
 const adminLogin = require("./routes/adminLogin");
 
-<<<<<<< HEAD
-=======
 // const userRegister = require("./routes/userRegister");
->>>>>>> register
 
 const bitnareEvents = require("./routes/bitnareEvents");
 
@@ -26,26 +23,11 @@ app.use(bodyparser.json());
 app.use(cors());
 
 app.use("/user", userRegister);
-<<<<<<< HEAD
-app.use("/post",postRoutes);
-
-app.use("/events",bitnareEvents);
-
-
-
-
-
-
-
-
-
-=======
 app.use("/post", postRoutes);
 app.use("/admin", adminLogin);
 app.use("/events",bitnareEvents);
 
 
->>>>>>> register
 //for handliing cors errors
 app.use((req, res, next) => {
 
@@ -59,18 +41,6 @@ app.use((req, res, next) => {
     }
     next();
 });
-
-
-
-
-app.use((req, res, next) => {
-    const error = new Error("Not found");
-    error.status = 404;
-    next(error);
-  });
-
- 
-
 
 app.use((error, req, res, next) => {
     res.status(error.status || 500);
