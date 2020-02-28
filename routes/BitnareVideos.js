@@ -22,9 +22,23 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+//route to get all videos from diskstorage
+router.get('/', (req, res, next) => {
+    videosModel.find().select('_id videodescription videopath userid').exec()
+        .then(result => {
+            res.status(200).json({
 
+                "Videos": result
+            })
 
+        }).catch(err => {
+            res.status(500).json({
+                "message": "Videos all fetched"
+            })
+        })
+})
 
+//route to add videos on diskstorage
 router.post('/add', upload.array("videopath", 5), (req, res, next) => {
     const videoData = {
         "videodescription": req.body.videodescription,
@@ -50,6 +64,42 @@ router.post('/add', upload.array("videopath", 5), (req, res, next) => {
     })
 
 });
+
+//route to fetch single video from diskstorage
+
+router.get('/:videoid', (req, res, next) => {
+    const id = req.params.videoid;
+    videosModel.findById(id).select('_id videodescription videopath')
+        .exec().then(result => {
+            res.status(200).json({
+                "Result": result
+            })
+
+        }).catch(err => {
+            res.status(500).json({
+                "Messsage": err
+            })
+        })
+
+
+});
+
+//route to delete video from diskstorage
+router.delete('/delete/:videoid', (req, res, next) => {
+    const id = req.params.videoid;
+    videosModel.remove({ _id: id }).exec()
+        .then(result => {
+            res.status(200).json({
+                "Message": "Your video is deleted!"
+            })
+
+        }).catch(err => {
+            res.status(500).json({
+                "Message": err
+            })
+        })
+});
+
 
 
 
