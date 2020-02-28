@@ -8,9 +8,10 @@ const cors = require("cors");
 const multer = require('multer');
 const bodyparser = require('body-parser');
 const userRegister = require("./routes/userRegister");
-const postRoutes= require("./routes/postRoutes.js");
+const postRoutes = require("./routes/postRoutes.js");
+const adminLogin = require("./routes/adminLogin");
 
-const userRegister = require("./routes/userRegister");
+// const userRegister = require("./routes/userRegister");
 
 const bitnareEvents = require("./routes/bitnareEvents");
 
@@ -22,16 +23,9 @@ app.use(bodyparser.json());
 app.use(cors());
 
 app.use("/user", userRegister);
-app.use("/post",postRoutes);
-
-
+app.use("/post", postRoutes);
+app.use("/admin", adminLogin);
 app.use("/events",bitnareEvents);
-
-
-
-
-
-app.use("/user", userRegister);
 
 
 //for handliing cors errors

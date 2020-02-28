@@ -47,18 +47,14 @@ router.post("/addUser", (req, res) => {
                     var addUser = new user(data);
                     addUser.save().then(function() {
                         res.send({
-
                             message:"Sucessful "
                         });
-
-                        
+                      
                     }).catch(err => {
                         res.status(500).send(
                             err.errors
                         );
-
                         })
-
                 }
 
             })
@@ -81,13 +77,16 @@ router.post('/login', async function(req, res) {
     } else {
         try {
             const users = await user.checkCrediantialsDb(req.body.username, req.body.password);
+
             if (users) {
+               const token = await users.generateAuthToken();
                 var id = users._id;
-                var username = users.username;
+                // var username = users.username;
 
                 res.send({
                     id, 
-                    username,
+                    // username,
+                    token,
                     message: "Login sucess"
                 });
 
