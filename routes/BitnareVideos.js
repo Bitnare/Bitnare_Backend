@@ -46,7 +46,7 @@ router.post('/add', upload.array("videopath", 5), (req, res, next) => {
             const videoPath = file.path;
             return videoPath;
         }),
-        "videodate": req.body.videodate
+        "videodate": req.body.videodate 
     }
 
     const saveVideo = new videosModel(videoData);
